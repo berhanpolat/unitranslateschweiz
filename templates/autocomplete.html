@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- font awesome from BootstrapCDN -->
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+<link href="/public/app.css" rel="stylesheet">
+<script src="public/dist/aws-sdk.js"></script>
+
+
+<script src="https://kit.fontawesome.com/896bdf22ec.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-134049591-2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-134049591-2');
+</script>
+
+<style>
+* {
+  box-sizing: border-box;     
+  -webkit-box-sizing: border-box;
+}
+body {
+  font: 18px Arial;
+  height: 100%;
+  margin: 0%;  
+  margin-left: 10px;
+  text-align: center;
+}
+
+.column {
+  float: left;
+  width: 50%;
+  padding: 20px;
+  background-color: white;
+  margin-bottom: 50px;
+  /* height: 300px;  */
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+  background-color: white;
+}
+
+
+/*the container must be positioned relative:*/
+.autocomplete {
+  position: relative;
+  display: inline-block;
+}
+
+
+input {
+  border: 1px solid transparent;
+  background-color: #f1f1f1;
+  padding: 10px;
+  font-size: 18px;
+  margin-left: 10px;
+  margin-block-start: 0px;
+  color: black;
+}
+textarea{
+  font-size: 16px;
+  font-style: normal;
+}
+
+input[type=text] {
+  background-color:rgb(245, 240, 230);
+  width: 100%;
+}
+
+input[type=submit] {
+  background-color: DodgerBlue;
+  color: #fff;
+  cursor: pointer;
+  text-align: center;
+  align-content: center;
+  display:block;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.autocomplete-items {
+  position: absolute;
+  border: 1px solid #d4d4d4;
+  color: black;
+  border-bottom: none;
+  border-top: none;
+  z-index: 99;
+  /*position the autocomplete items to be the same width as the container:*/
+  top: 100%;
+  left: 0;
+  right: 0;
+  text-align: left;
+}
+
+.submit{
+  margin-block-start: 10px;
+}
+
+.secondsubmit{
+  display: none;
+}
+
+.autocomplete-items div {
+  padding: 10px;
+  cursor: pointer;
+  background-color: #fff; 
+  border-bottom: 1px solid #d4d4d4; 
+}
+
+/*when hovering an item:*/
+.autocomplete-items div:hover {
+  background-color: #e9e9e9; 
+}
+
+/*when navigating through the items using the arrow keys:*/
+.autocomplete-active {
+  background-color: DodgerBlue !important; 
+  color: #ffffff; 
+
+}
+
+.choicefirst {
+  background-color: DodgerBlue !important; 
+  color: #ffffff; 
+  margin-left: 15px;
+  text-align: center;
+}
+
+.choicesecond {
+  background-color: DodgerBlue !important; 
+  color: #ffffff; 
+}
+
+.choicethird {
+  background-color: DodgerBlue !important; 
+  color: #ffffff; 
+}
+
+.sentimentfirst {
+  background-color: DodgerBlue !important; 
+  color: #ffffff; 
+  display: inline-block;
+}
+
+.container{
+  position: relative;
+  text-align: left;
+  width:  calc(100vw - 30px);      /* calc and viewport to the rescue */
+  height: calc(100vh - 20px);
+  font-size: 18px;
+  padding: 10px;
+  display: flex;
+  background-color: #fff;
+  /* border: 1px solid #bbb; /* sonra silinecek */
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+
+.containertext{
+  margin-right: auto;
+  margin-top: 15px;
+  margin-left: 15px;
+  font-size: 18px;
+}
+
+.translatetextarea{
+  margin-right: auto;
+  margin-top: 35px;
+  margin-left: 15px;
+  font-size: 16px;
+  font-style: normal;
+  font-family:inherit;
+  color:rgb(72, 70, 70);
+  /* border-bottom: 5px; */
+}
+.translatetextarea:focus {
+    outline: none !important;
+    border:1px solid red;
+    box-shadow: 0 0 10px #719ECE;
+}
+
+.buttonclass{
+  position: relative;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  width: fit-content;
+  resize: both;
+  height: 50px;
+  font-size: 15px;
+  padding: 10px;
+  color:white; 
+}
+
+.buttonclass:hover{
+  /* color: dodgerblue; */
+  background-color:dodgerblue;
+}
+
+.buttonclasstranslate{
+  position: relative;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-left: 13.5px;
+  width: fit-content;
+  resize: both;
+  height: 50px;
+  font-size: 15px;
+  padding: 10px;
+  color: black;; 
+}
+
+.buttonclasstranslate:hover{
+  /* color: dodgerblue; */
+  background-color:dodgerblue;
+}
+
+
+
+.greetingsclass{
+margin-right: 25px;
+}
+
+.makeitgoodagain{
+  margin-top: 25px;
+  position: relative;
+  text-align: center;
+}
+
+.allcontainter{
+  display: inline-block;
+}
+
+.logout{
+  text-align: right;
+
+  margin-right: 10px;
+  /* margin-top: -50px; */
+
+}
+
+.pclass{
+  margin-left: 15px;
+}
+
+.headersecond{
+  text-align: center;
+  font-size: 25px;
+}
+
+div { margin: 0px; }
+
+.styled-select {
+   
+   height: 29px;
+   overflow: hidden;
+   width: 300px;
+   margin-left: 10px;
+   font-size: 18px;
+}
+
+.styled-select select {
+   background: transparent;
+   border: none;
+   font-size: 14px;
+   height: 29px;
+   padding: 5px; /* If you add too much padding here, the options won't show in IE */
+   width: 268px;
+}
+
+.styled-select.slate {
+   background: url(http://i62.tinypic.com/2e3ybe1.jpg) no-repeat right center;
+   height: 34px;
+   width: 240px;
+}
+
+.styled-select.slate select {
+   border: 1px solid #ccc;
+   font-size: 16px;
+   height: 34px;
+   width: 268px;
+}
+
+
+.blue    { background-color: rgb(245, 240, 230); }
+
+.blue select    { color:black; }
+
+.custom-select {
+  position: relative;
+  font-family: Arial;
+  display: inline-block;
+  margin-bottom: 5px;
+}
+
+.custom-select select {
+  display: none; /*hide original SELECT element:*/
+}
+
+.fossize{
+  font-size: 20px;
+  width: 350px;
+}
+
+.select-selected {
+  background-color: white;
+}
+
+/*style the arrow inside the select element:*/
+.select-selected:after {
+  position: absolute;
+  content: "";
+  top: 14px;
+  right: 12px;
+  width: 0;
+  height: 0;
+  border: 6px solid transparent;
+  border-color: black transparent transparent transparent;
+}
+
+/*point the arrow upwards when the select box is open (active):*/
+.select-selected.select-arrow-active:after {
+  border-color: transparent transparent #fff transparent;
+  top: 7px;
+}
+
+/*style the items (options), including the selected item:*/
+.select-items div,.select-selected {
+  color: black;
+  padding: 8px 16px;
+  border: 1px solid transparent;
+  border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
+  cursor: pointer;
+  user-select: none;
+}
+
+/*style items (options):*/
+.select-items {
+  position: absolute;
+  background-color: rgb(250, 250, 250);
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 99;
+}
+
+/*hide the items when the select box is closed:*/
+.select-hide {
+  display: none;
+}
+
+.select-items div:hover, .same-as-selected {
+  background-color: dodgerblue;
+  font-size: 20px;
+
+}
+.choses{
+    display: inline;
+  }
+.tg{
+  display:table;
+}
+
+.oldheader {
+  /* padding: 20px; */
+
+  /* background:rgb(223, 219, 219); */
+  color: black;
+  background-color: white;
+  /* margin-left: 7.5px; */
+  /* margin-top: 5px; */
+  /* margin-right: 200px; */
+  display: inherit;
+  background: url('/public/imgps.png') no-repeat;
+  /* height: 150px; */
+  background-size:cover;
+
+}
+img {
+  border-radius: 50%;
+  margin-left: 25px;
+  margin-top: 7.5px;
+  /* display: flex; */
+}
+
+.translatestuff{
+  margin-left: 25px;
+  display: inline-flex;
+}
+
+/* .tg{
+  margin-top: -30px;
+} */
+
+.header {
+  overflow: hidden;
+  /* background-color: #f1f1f1; */
+  padding: 18px 8px;
+  background: url('/public/imgps.png') no-repeat;
+  background-size: cover;
+}
+
+.header a {
+  float: left;
+  color: black;
+  text-align: center;
+  padding: 12px;
+  text-decoration: none;
+  font-size: 18px; 
+  line-height: 25px;
+  border-radius: 4px;
+  
+}
+
+.header a.logo {
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.header a:hover {
+  /* background-color: navajowhite; */
+  color: black;
+}
+
+.header a.active {
+  background-color: dodgerblue;
+  color: white;
+}
+
+.header-right {
+  float: right;
+  background: none;
+  padding: 18px 8px;
+}
+
+.thirdstep{
+  float: center;
+  display: block;
+  text-align: center;
+}
+
+@media screen and (max-width: 500px) {
+  .header a {
+    float: none;
+    display: block;
+    text-align: left;
+  }
+  
+  .header-right {
+    float: none;
+
+  }
+}
+
+
+</style>
+<title>UNITRANSLATE</title>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-134049591-2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-134049591-2');
+</script>
+<link rel="icon" 
+type="image/png" 
+href="https://static.wixstatic.com/media/82991b_793af11da58c4c178fe61e3fbc14d643~mv2.jpg/v1/fill/w_1181,h_905/UZZ-08.jpg">
+</head>     
+
+<body>
+
+        <!-- <h1 href="https://www.unitranslate.ch/""> <img src="https://static.wixstatic.com/media/82991b_793af11da58c4c178fe61e3fbc14d643~mv2.jpg/v1/fill/w_1181,h_905/UZZ-08.jpg" alt="UniTranslate Logo" href="https://www.unitranslate.ch/" target="_blank" width="75" height="68"> </h1>  -->
+          <!-- <a class="newa" href="https://www.unitranslate.ch/">UniTranslate Online Übersetzer (Beta)</a> -->
+<!--  
+          <div class="submit logout">
+              <a id="qsLogoutBtn" href="/logout">Logout</a>
+      </div> -->
+
+      <div class="header">
+          <a href="#default" class="logo"> <img src="https://static.wixstatic.com/media/82991b_793af11da58c4c178fe61e3fbc14d643~mv2.jpg/v1/fill/w_1181,h_905/UZZ-08.jpg" alt="UniTranslate Logo" href="https://www.unitranslate.ch/" target="_blank" width="75" height="68">  UniTranslate Online Übersetzer (Beta)</a>
+          <div class="header-right">
+            
+            <a href="mailto:info@unitranslate.ch">Contact</a>
+            <a href="https://www.unitranslate.ch/uebersetzungsbuerozurich" target="_blank">About</a>
+            <a class="active" id="qsLogoutBtn" href="/logout">Logout </a>
+          </div>
+        </div>
+
+
+        <!-- <div class="submit logout">
+            <a id="qsLogoutBtn" href="/logout">Logout</a>
+    </div> -->
+        <br> <br>
+        <!-- <div class="login-page clearfix">
+            <div class="logged-in-box auth0-box logged-in">
+                <a id="unitranslatemain" class="btn btn-primary btn-lg btn-logout btn-block" href="https://unitranslate.ch/" target="_blank">UNITRANSLATE</a>
+        
+              </div>
+
+        </div> -->
+
+
+  </body>
+
+
+  <body>
+    <!-- <h4 class="headersecond">–UniTranslate Translator–</h4> -->
+    
+
+    <table class="tg" align="center">
+        <tr>
+            <th align="left">
+              
+
+                Translate from: <div class="custom-select" style="width:140px;">
+                <select id="sourceLanguageCodeDropdown">
+                    <option value="en">English</option>
+                    <option value="ar">Arabic</option>
+                    <option value="zh">Chinese (Simplified)</option>
+                    <option value="cs">Czech</option>
+                    <option value="en">English</option>
+                    <option value="fr">French</option>
+                    <option value="de">German</option>         
+                    <option value="it">Italian</option>
+                    <option value="ja">Japanese</option>
+                    <option value="pt">Portuguese</option>       
+                    <option value="ru">Russian</option>
+                    <option value="es">Spanish</option>
+                    <option value="zh-TW">Taiwanese Mandarin</option>
+                    <option value="tr">Turkish</option>
+                </select>
+            </th>
+          </div>
+            <th align="left">
+Translate into: <div class="custom-select" style="width:140px;">
+                <select id="targetLanguageCodeDropdown">
+                    <option value="ar">Arabic</option>
+                    <option value="ar">Arabic</option>
+                    <option value="zh">Chinese (Simplified)</option>
+                    <option value="cs">Czech</option>
+                    <option value="en">English</option>
+                    <option value="fr">French</option>
+                    <option value="de" selected>German</option>                 
+                    <option value="it">Italian</option>
+                    <option value="ja">Japanese</option>
+                    <option value="pt">Portuguese</option>
+                    <option value="ru">Russian</option>
+                    <option value="es">Spanish</option>   
+                    <option value="zh-TW">Taiwanese Mandarin</option>
+                    <option value="tr">Turkish</option>
+                </select>
+            </th>
+        </tr>
+
+
+      <div class="containertext">
+        <tr>
+        
+            <th>
+                
+                <textarea id="inputText" class="translatetextarea" name="inputText" rows="18" cols="55" placeholder="Type or paste your text to translate"></textarea>
+            </th>
+            <th>
+              
+                <textarea id="outputText" class="translatetextarea" name="outputText" rows="18" cols="55" placeholder="Translated text"></textarea>
+            </th>
+        </tr>
+        </div>
+
+        <tr>
+            <th align="left">
+                <button type="button" class="buttonclasstranslate" id="translateButton" name="translateButton" onclick="doTranslate()">Translate</button>
+                <!-- <button type="button" name="synthesizeButton" onclick="doSynthesizeInput()">Synthesize Input Speech</button> -->
+                <button type="button" class="buttonclasstranslate" name="clearButton" onclick="clearInputs()">Clear</button>
+                <button type="button" class="buttonclasstranslate" name="requestButton" onclick="window.location.href = 'https://www.unitranslate.ch/angebot'">Professional Translation</button>
+
+            </th>
+            <th align="left">
+                <!-- <button type="button" name="synthesizeButton" onclick="doSynthesizeOutput()">Synthesize Output Speech</button> -->
+            </th>
+        </tr>
+
+    </table>
+    <br>
+    <br>
+    <br>
+    <br>
+  </body>
+    <body>
+      <h2> Step 1) Select an operation</h2>
+      <div class="choses">
+
+      <form action="/dashboard" method="post" enctype="multipart/form-data">
+        <div class="custom-select fossize">
+          <select id="todow" name="todow">
+            <option value="trans" {% if todow == 'trans' %}selected{% endif %}>Document translation (DOCX)</option>
+            <option value="trans" {% if todow == 'trans' %}selected{% endif %}>Document translation (DOCX)</option>
+            <option value="OCR" {% if todow == 'OCR' %}selected{% endif %}>OCR (PNG,TIFF,JPEG to text) </option>
+            <option value="kexkract" {% if todow == 'kexkract' %}selected{% endif %}>Extract text (PDF,PPTX, DOCX, etc.)</option>
+            <!-- <option value="PDFOCR" {% if todow == 'PDFOCR' %}selected{% endif %}>Extract text from a scan (PDF)</option> -->
+          </select>
+  
+        </div>
+        
+
+    <p>
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul class=flashes>
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+        </ul>
+        {% endif %}
+      {% endwith %}
+    </p> <br> <br> <br>
+<!-- <h2> Step 2) Choose an operation</h2> -->
+    <div class="row">
+        <div class="column">
+            <h3>Choose a language pair for document <b>translation</b></h3>
+            <br> <br>
+            <table class="tg" align="center" id="lantable">
+              <tr>
+                  <th align="left">
+                    
+                      Translate from: <div class="custom-select" style="width:140px;">
+          <select id="sourcelanguage" name="sourcelanguage">
+              <option value="de">German</option>
+              <option value="ar" {% if sourcelanguage == 'ar' %}selected{% endif %}>Arabic</option>
+              <option value="zh" {% if sourcelanguage == 'zh' %}selected{% endif %} >Chinese (Simplified)</option>
+              <option value="cs" {% if sourcelanguage == 'cs' %}selected{% endif %} >Czech</option>
+              <option value="en" {% if sourcelanguage == 'en' %}selected{% endif %} >English</option>
+              <option value="fr" {% if sourcelanguage == 'fr' %}selected{% endif %} >French</option>
+              <option value="de" {% if sourcelanguage == 'de' %}selected{% endif %} >German</option>                 
+              <option value="it" {% if sourcelanguage == 'it' %}selected{% endif %} >Italian</option>
+              <option value="ja" {% if sourcelanguage == 'ja' %}selected{% endif %} >Japanese</option>
+              <option value="pt" {% if sourcelanguage == 'pt' %}selected{% endif %} >Portuguese</option>
+              <option value="ru" {% if sourcelanguage == 'ru' %}selected{% endif %} >Russian</option>
+              <option value="es" {% if sourcelanguage == 'es' %}selected{% endif %} >Spanish</option>   
+              <option value="zh-TW" {% if sourcelanguage == 'zh-TW' %}selected{% endif %} >Taiwanese Mandarin</option>
+              <option value="tr" {% if sourcelanguage == 'tr' %}selected{% endif %} >Turkish</option>
+          </select>
+        </th>
+          </tr>
+          <th align="left">
+Translate into: <div class="custom-select" style="width:140px;">
+    <select id="targetlanguage" name="targetlanguage">
+        <option value="en">English</option>
+        <option value="ar" {% if targetlanguage == 'ar' %}selected{% endif %}>Arabic</option>
+        <option value="zh" {% if targetlanguage == 'zh' %}selected{% endif %} >Chinese (Simplified)</option>
+        <option value="cs" {% if targetlanguage == 'cs' %}selected{% endif %} >Czech</option>
+        <option value="en" {% if targetlanguage == 'en' %}selected{% endif %} >English</option>
+        <option value="fr" {% if targetlanguage == 'fr' %}selected{% endif %} >French</option>
+        <option value="de" {% if targetlanguage == 'de' %}selected{% endif %} >German</option>                 
+        <option value="it" {% if targetlanguage == 'it' %}selected{% endif %} >Italian</option>
+        <option value="ja" {% if targetlanguage == 'ja' %}selected{% endif %} >Japanese</option>
+        <option value="pt" {% if targetlanguage == 'pt' %}selected{% endif %} >Portuguese</option>
+        <option value="ru" {% if targetlanguage == 'ru' %}selected{% endif %} >Russian</option>
+        <option value="es" {% if targetlanguage == 'es' %}selected{% endif %} >Spanish</option>   
+        <option value="zh-TW" {% if targetlanguage == 'zh-TW' %}selected{% endif %} >Taiwanese Mandarin</option>
+        <option value="tr" {% if targetlanguage == 'tr' %}selected{% endif %} >Turkish</option>
+    </select> </div>
+          </th>
+      </tr>
+          </table>
+
+      </div> 
+
+      <div class="column autocomplete">
+        <h3>Choose a writing system/script for OCR:</h3>
+        <br> <br>
+        <input id="ocrlang" autocomplete="off" type="text" name="ocrlang" placeholder="German:deu"  value="{{ocrlang}}" style="width:340px;">
+
+      </div> </div>
+
+<div class="thirdstep">
+            <h2> Step 3) Upload your file</h2>
+            <p align="center"> 
+               <input align="center" type="file" name="image" id="image" autocomplete="off">
+             </p>
+    
+
+  </div>    <br> <br>
+<p align="center">
+  <input type="submit" value="Submit"> </p>
+      </form>
+<br> <br> <br> <br> <br> <br>
+
+    </body>
+  
+
+    <script type="text/javascript">
+        // set the focus to the input box
+        document.getElementById("inputText").focus();
+
+        AWS.config.region = 'us-east-2'; // Region
+
+  
+        AWS.config.credentials = new AWS.Credentials("AKIAZLB4O4AZJ7PJUDFQ", "aWe7VQuAinKgK+wC79LTJJAAUa4lrLPESeaTcD/A");
+
+        var translate = new AWS.Translate({region: AWS.config.region});
+        var polly = new AWS.Polly();
+
+        function doTranslate() {
+            var inputText = document.getElementById('inputText').value;
+            if (!inputText) {
+                alert("Input text cannot be empty.");
+                exit();
+            }
+
+            // get the language codes
+            var sourceDropdown = document.getElementById("sourceLanguageCodeDropdown");
+            var sourceLanguageCode = sourceDropdown.options[sourceDropdown.selectedIndex].value;
+
+            var targetDropdown = document.getElementById("targetLanguageCodeDropdown");
+            var targetLanguageCode = targetDropdown.options[targetDropdown.selectedIndex].value;
+
+            var params = {
+                Text: inputText,
+                SourceLanguageCode: sourceLanguageCode,
+                TargetLanguageCode: targetLanguageCode
+            };
+
+            translate.translateText(params, function(err, data) {
+                if (err) {
+                    console.log(err, err.stack);
+                    alert("Error calling UniTranslate. " + err.message);
+                    return;
+                }
+                if (data) {
+                    var outputTextArea = document.getElementById('outputText');
+                    outputTextArea.value = data.TranslatedText;
+                }
+            });
+        }
+
+        function doSynthesizeInput() {
+            var text = document.getElementById('inputText').value.trim();
+            if (!text) {
+                return;
+            }
+            var sourceLanguageCode = document.getElementById("sourceLanguageCodeDropdown").value;
+            doSynthesize(text, sourceLanguageCode);
+        }
+
+        function doSynthesizeOutput() {
+            var text = document.getElementById('outputText').value.trim();
+            if (!text) {
+                return;
+            }
+            var targetLanguageCode = document.getElementById("targetLanguageCodeDropdown").value;
+            doSynthesize(text, targetLanguageCode);
+        }
+
+        function doSynthesize(text, languageCode) {
+            var voiceId;
+            switch (languageCode) {
+                case "de":
+                    voiceId = "Marlene";
+                    break;
+                case "en":
+                    voiceId = "Joanna";
+                    break;
+                case "es":
+                    voiceId = "Penelope";
+                    break;
+                case "fr":
+                    voiceId = "Celine";
+                    break;
+                case "pt":
+                    voiceId = "Vitoria";
+                    break;
+                default:
+                    voiceId = null;
+                    break;
+            }
+            if (!voiceId) {
+                alert("Speech synthesis unsupported for language code: \"" + languageCode + "\"");
+                return;
+            }
+            var params = {
+                OutputFormat: "mp3", 
+                SampleRate: "8000", 
+                Text: text, 
+                TextType: "text", 
+                VoiceId: voiceId
+            };
+            polly.synthesizeSpeech(params, function(err, data) {
+                if (err) {
+                    console.log(err, err.stack); // an error occurred
+                    alert("Error calling UniTranslate Lea. " + err.message);
+                }
+                else {
+                    var uInt8Array = new Uint8Array(data.AudioStream);
+                    var arrayBuffer = uInt8Array.buffer;
+                    var blob = new Blob([arrayBuffer]);
+                    var url = URL.createObjectURL(blob);
+
+                    audioElement = new Audio([url]);
+                    audioElement.play();
+                }
+            });
+        }
+
+        function clearInputs() {
+            document.getElementById('inputText').value = "";
+            document.getElementById('outputText').value = "";
+            // document.getElementById("sourceLanguageCodeDropdown").value = "en";
+            // document.getElementById("targetLanguageCodeDropdown").value = "en";
+            
+        }
+    </script>
+</body>
+  <script>
+
+
+var x, i, j, selElmnt, a, b, c;
+/* Look for any elements with the class "custom-select": */
+x = document.getElementsByClassName("custom-select");
+for (i = 0; i < x.length; i++) {
+  selElmnt = x[i].getElementsByTagName("select")[0];
+  /* For each element, create a new DIV that will act as the selected item: */
+  a = document.createElement("DIV");
+  a.setAttribute("class", "select-selected");
+  a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
+  x[i].appendChild(a);
+  /* For each element, create a new DIV that will contain the option list: */
+  b = document.createElement("DIV");
+  b.setAttribute("class", "select-items select-hide");
+  for (j = 1; j < selElmnt.length; j++) {
+    /* For each option in the original select element,
+    create a new DIV that will act as an option item: */
+    c = document.createElement("DIV");
+    c.innerHTML = selElmnt.options[j].innerHTML;
+    c.addEventListener("click", function(e) {
+        /* When an item is clicked, update the original select box,
+        and the selected item: */
+        var y, i, k, s, h;
+        s = this.parentNode.parentNode.getElementsByTagName("select")[0];
+        h = this.parentNode.previousSibling;
+        for (i = 0; i < s.length; i++) {
+          if (s.options[i].innerHTML == this.innerHTML) {
+            s.selectedIndex = i;
+            h.innerHTML = this.innerHTML;
+            y = this.parentNode.getElementsByClassName("same-as-selected");
+            for (k = 0; k < y.length; k++) {
+              y[k].removeAttribute("class");
+            }
+            this.setAttribute("class", "same-as-selected");
+            break;
+          }
+        }
+        h.click();
+    });
+    b.appendChild(c);
+  }
+  x[i].appendChild(b);
+  a.addEventListener("click", function(e) {
+    /* When the select box is clicked, close any other select boxes,
+    and open/close the current select box: */
+    e.stopPropagation();
+    closeAllSelect(this);
+    this.nextSibling.classList.toggle("select-hide");
+    this.classList.toggle("select-arrow-active");
+  });
+}
+
+function closeAllSelect(elmnt) {
+  /* A function that will close all select boxes in the document,
+  except the current select box: */
+  var x, y, i, arrNo = [];
+  x = document.getElementsByClassName("select-items");
+  y = document.getElementsByClassName("select-selected");
+  for (i = 0; i < y.length; i++) {
+    if (elmnt == y[i]) {
+      arrNo.push(i)
+    } else {
+      y[i].classList.remove("select-arrow-active");
+    }
+  }
+  for (i = 0; i < x.length; i++) {
+    if (arrNo.indexOf(i)) {
+      x[i].classList.add("select-hide");
+    }
+  }
+}
+
+/* If the user clicks anywhere outside the select box,
+then close all select boxes: */
+document.addEventListener("click", closeAllSelect);
+
+var input = document.getElementById("translateButton");
+input.addEventListener("keyup", function(event) {
+  if (event.keyCode === 13) {
+   event.preventDefault();
+   document.getElementById("translateButton").click();
+  }
+})
+
+
+
+function autocomplete(inp, arr) {
+  /*the autocomplete function takes two arguments,
+  the text field element and an array of possible autocompleted values:*/
+  var currentFocus;
+  /*execute a function when someone writes in the text field:*/
+  inp.addEventListener("input", function(e) {
+      var a, b, i, val = this.value;
+      /*close any already open lists of autocompleted values*/
+      closeAllLists();
+      if (!val) { return false;}
+      currentFocus = -1;
+      /*create a DIV element that will contain the items (values):*/
+      a = document.createElement("DIV");
+      a.setAttribute("id", this.id + "autocomplete-list");
+      a.setAttribute("class", "autocomplete-items");
+      /*append the DIV element as a child of the autocomplete container:*/
+      this.parentNode.appendChild(a);
+      /*for each item in the array...*/
+      for (i = 0; i < arr.length; i++) {
+        /*check if the item starts with the same letters as the text field value:*/
+        if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+          /*create a DIV element for each matching element:*/
+          b = document.createElement("DIV");
+          /*make the matching letters bold:*/
+          b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+          b.innerHTML += arr[i].substr(val.length);
+          /*insert a input field that will hold the current array item's value:*/
+          b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+          /*execute a function when someone clicks on the item value (DIV element):*/
+          b.addEventListener("click", function(e) {
+              /*insert the value for the autocomplete text field:*/
+              inp.value = this.getElementsByTagName("input")[0].value;
+              /*close the list of autocompleted values,
+              (or any other open lists of autocompleted values:*/
+              closeAllLists();
+          });
+          a.appendChild(b);
+        }
+      }
+  });
+  /*execute a function presses a key on the keyboard:*/
+  inp.addEventListener("keydown", function(e) {
+      var x = document.getElementById(this.id + "autocomplete-list");
+      if (x) x = x.getElementsByTagName("div");
+      if (e.keyCode == 40) {
+        /*If the arrow DOWN key is pressed,
+        increase the currentFocus variable:*/
+        currentFocus++;
+        /*and and make the current item more visible:*/
+        addActive(x);
+      } else if (e.keyCode == 38) { //up
+        /*If the arrow UP key is pressed,
+        decrease the currentFocus variable:*/
+        currentFocus--;
+        /*and and make the current item more visible:*/
+        addActive(x);
+      } else if (e.keyCode == 13) {
+        /*If the ENTER key is pressed, prevent the form from being submitted,*/
+        e.preventDefault();
+        if (currentFocus > -1) {
+          /*and simulate a click on the "active" item:*/
+          if (x) x[currentFocus].click();
+        }
+      }
+  });
+  function addActive(x) {
+    /*a function to classify an item as "active":*/
+    if (!x) return false;
+    /*start by removing the "active" class on all items:*/
+    removeActive(x);
+    if (currentFocus >= x.length) currentFocus = 0;
+    if (currentFocus < 0) currentFocus = (x.length - 1);
+    /*add class "autocomplete-active":*/
+    x[currentFocus].classList.add("autocomplete-active");
+  }
+  function removeActive(x) {
+    /*a function to remove the "active" class from all autocomplete items:*/
+    for (var i = 0; i < x.length; i++) {
+      x[i].classList.remove("autocomplete-active");
+    }
+  }
+  function closeAllLists(elmnt) {
+    /*close all autocomplete lists in the document,
+    except the one passed as an argument:*/
+    var x = document.getElementsByClassName("autocomplete-items");
+    for (var i = 0; i < x.length; i++) {
+      if (elmnt != x[i] && elmnt != inp) {
+        x[i].parentNode.removeChild(x[i]);
+      }
+    }
+  }
+  /*execute a function when someone clicks in the document:*/
+  document.addEventListener("click", function (e) {
+      closeAllLists(e.target);
+  });
+}
+
+
+
+var lookuptopics = ["Afrikaans:afr","Amharic:amh","Arabic:ara","Assamese:asm","Azerbaijani:aze","Azerbaijani cyrillic:aze","Belarusian:bel", 
+"Bengali:ben","Sino-Tibetan:bod","Bosnian:bos","Breton:bre","Bulgarian:bul","Catalan-Valencian:cat","Cebuano:ceb","Czech:ces","Chinese-Simple:chi_sim","Chinese-Simple_Vertical:chi_sim_vert",
+"Chinese-Traditional:chi_tra","Chinese-Traditional-Vertical:chi_tra_vert","Cherokee:chr","Corsican:cos","Cymraeg:cym","Danish:dan","Danish in fraktur script:dan_frak",
+"German:deu","German in fraktur script:deu_frak","Divehi-Maldivian:div","Dzongkha:dzo","Modern Greek:ell","English:eng","Anglais Moyen:enm","Esperanto:epo","...:equ","Uralic:est","Basque:eus",
+"Faroese:fao","Persian:fas","Filipino-Pilipino:fil","Finnish:fin","French:fra","Frankish:fra","French Middle:frm","Frysk-Western Frisian:frm","Gaelish-Scottish:gla","Irish:gle","Galician:glg",
+"Ancient Greek:grc","Guajarati:guj","Irish:gle","Creole-Haitian:hat","Hebrew:heb","Hindi:hin","Croatian:hrv","Hungarian:hun","Armenian:hye","Croatian:hrv","Inuktitut:iku","Indonesian:ind","Islenska:isl","Italian:ita","Italian old:ita_old",
+"Javanese:jav","Japanese:jap","Japanese Vertical:jpn_vert","Kannada:kan","Croatian:hrv","Georgian:kat","Georgian old:kat_old","Kazakh:kaz","Central Khmer:khm",
+"Kirgiz-Kyrgyz:kir","Kurdish northern, Kurmanji:kmr","Koreanic:kor","Koreanic_vertical:kor_vert","Lao:lao",
+"Latin:lat","Latvian:lav","Lithuanian:lit","Luxembourgish:ltz","Malayalam:mal","Marathi:mar","Macedonian:mcd","Maltese:mlt","Mongolic:mon",
+"Maori:mri","Malay:msa","Burmese:mya","Nepali:nep","Dutsch-Flemish:nld","Norwegian:nor","Occitan:oci","Oriya:ori",
+"...:osd","Panjabi-Punjabi:pan","Polish:pol","Portuguese:por","Pashto-Pushto:pus","Quechuan:que","Romanian-Moldavian:ron",
+"Russian:rus","Sanskrit:san","Sindhi:sin","Slovak:slk","Slovak frankish:slk_frak","Slovenian:slv",
+"Sindhi:snd","Spanish:spa","Spanish_old:spa_old","Albanian:sqi","Serbian:srp","Serbian latin:srp_latin",
+"Sundanese:sund","Swahili:swa","Swedish:swe","Syriac:syr","Tamil:tam","Tatar:tat","Telugu:tel",
+"Tajik:tgk","Tagalog:tgl","Thai:tha","Tigrinya:tir","Tonga:ton","Turkish:tur","Uighur-Uyghur:uig",
+"Ukrainian:ukr","Urdu:urd","Uzbek:uzb","Uzbek Cyrillic:uzb_cyrl","Vietnamese:vie","Yiddish:yid",
+"Yoruba:yor"];
+
+
+
+autocomplete(document.getElementById("ocrlang"), lookuptopics);
+
+
+</script>
+
+
+
+</html>

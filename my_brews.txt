@@ -1,0 +1,6 @@
+antiword
+poppler
+swig
+tesseract
+tesseract-lang
+unrtf

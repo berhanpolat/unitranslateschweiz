@@ -1,0 +1,530 @@
+<html>
+    <head>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+
+        <!-- font awesome from BootstrapCDN -->
+        <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+        <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+        <link href="/public/app.css" rel="stylesheet">
+        <script src="public/dist/aws-sdk.js"></script>
+
+        <link href="/public/app.css" rel="stylesheet">
+        <style>
+        img {
+          border-radius: 8px;
+        }
+        .fontsize{
+          font-size: 20px;
+        }
+        .agamisou{
+          font-size: 31.4px;
+        }
+
+
+        body {
+          font: 18px Arial;
+          height: 100%;
+          margin: 0%;  
+          margin-left: 10px;
+          }
+
+          .translatetextarea{
+            margin-right: auto;
+            margin-top: 15px;
+            margin-left: 15px;
+            font-size: 16px;
+            font-style: normal;
+            font-family:inherit;
+            color:rgb(72, 70, 70)
+}
+
+.buttonclass{
+  position: relative;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  width: fit-content;
+  resize: both;
+  height: 50px;
+  font-size: 15px;
+  padding: 10px; 
+}
+
+.buttonclass:hover{
+  color: goldenrod;
+  background-color:goldenrod;
+}
+
+.buttonclasstranslate{
+  position: relative;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-left: 13.5px;
+  width: fit-content;
+  resize: both;
+  height: 50px;
+  font-size: 15px;
+  padding: 10px; 
+}
+
+.buttonclasstranslate:hover{
+  color: goldenrod;
+  background-color:goldenrod;}
+
+.logout{
+  text-align: center;
+  align-self: center;
+}
+
+.pclass{
+  margin-left: 15px;
+}
+.header{
+  text-align: center;
+}
+
+
+.styled-select {
+   
+   height: 29px;
+   overflow: hidden;
+   width: 300px;
+   margin-left: 10px;
+   font-size: 18px;
+}
+
+.styled-select select {
+   background: transparent;
+   border: none;
+   font-size: 14px;
+   height: 29px;
+   padding: 5px; /* If you add too much padding here, the options won't show in IE */
+   width: 268px;
+}
+
+.styled-select.slate {
+   background: url(http://i62.tinypic.com/2e3ybe1.jpg) no-repeat right center;
+   height: 34px;
+   width: 240px;
+}
+
+.styled-select.slate select {
+   border: 1px solid #ccc;
+   font-size: 16px;
+   height: 34px;
+   width: 268px;
+}
+
+
+.blue    { background-color: rgb(245, 240, 230); }
+
+.blue select    { color:black; }
+
+.custom-select {
+  position: relative;
+  font-family: Arial;
+  display: inline-block;
+  margin-bottom: 5px;
+}
+
+.custom-select select {
+  display: none; /*hide original SELECT element:*/
+}
+
+.select-selected {
+  background-color: white;
+}
+
+/*style the arrow inside the select element:*/
+.select-selected:after {
+  position: absolute;
+  content: "";
+  top: 14px;
+  right: 10px;
+  width: 0;
+  height: 0;
+  border: 6px solid transparent;
+  border-color: #fff transparent transparent transparent;
+}
+
+/*point the arrow upwards when the select box is open (active):*/
+.select-selected.select-arrow-active:after {
+  border-color: transparent transparent #fff transparent;
+  top: 7px;
+}
+
+/*style the items (options), including the selected item:*/
+.select-items div,.select-selected {
+  color: black;
+  padding: 8px 16px;
+  border: 1px solid transparent;
+  border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
+  cursor: pointer;
+  user-select: none;
+}
+
+/*style items (options):*/
+.select-items {
+  position: absolute;
+  background-color: rgb(250, 250, 250);
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 99;
+}
+
+/*hide the items when the select box is closed:*/
+.select-hide {
+  display: none;
+}
+
+.select-items div:hover, .same-as-selected {
+  background-color: goldenrod;
+}
+        </style>
+    </head>
+
+    <body class="home">
+        <div class="container">
+            <div class="login-page clearfix">
+              <div class="login-box auth0-box before">
+                <img src="https://static.wixstatic.com/media/82991b_793af11da58c4c178fe61e3fbc14d643~mv2.jpg/v1/fill/w_1181,h_905/UZZ-08.jpg" alt="UniTranslate Logo" width="400" height="254.77" />
+                <h3 class="agamisou">Review Response</h3>
+                <p class="fontsize">Translator is loading</p>
+                <a id="qsLoginBtn" class="btn btn-primary btn-lg btn-login btn-block" href="/login">Log In</a>
+              </div>
+            </div>
+        </div>
+
+
+    </body>
+
+    <body>
+      <h4 class="headersecond">–UniTranslate Translator–</h4>
+  
+      <table class="tg" align="center">
+          <tr>
+              <th align="left">
+  
+                  Translate from: <div class="custom-select" style="width:140px;">
+                  <select id="sourceLanguageCodeDropdown">
+                      <option value="en">English</option>
+                      <option value="ar">Arabic</option>
+                      <option value="zh">Chinese (Simplified)</option>
+                      <option value="cs">Czech</option>
+                      <option value="en">English</option>
+                      <option value="fr">French</option>
+                      <option value="de">German</option>         
+                      <option value="it">Italian</option>
+                      <option value="ja">Japanese</option>
+                      <option value="pt">Portuguese</option>       
+                      <option value="ru">Russian</option>
+                      <option value="es">Spanish</option>
+                      <option value="zh-TW">Taiwanese Mandarin</option>
+                      <option value="tr">Turkish</option>
+                  </select>
+              </th>
+            </div>
+              <th align="left">
+  Translate into: <div class="custom-select" style="width:140px;">
+                  <select id="targetLanguageCodeDropdown">
+                      <!-- hier vielleicht deutsch als erste besser? -->
+                      <option value="ar">Arabic</option>
+                      <option value="ar">Arabic</option>
+                      <option value="zh">Chinese (Simplified)</option>
+                      <option value="cs">Czech</option>
+                      <option value="en">English</option>
+                      <option value="fr">French</option>
+                      <option value="de" selected>German</option>                 
+                      <option value="it">Italian</option>
+                      <option value="ja">Japanese</option>
+                      <option value="pt">Portuguese</option>
+                      <option value="ru">Russian</option>
+                      <option value="es">Spanish</option>   
+                      <option value="zh-TW">Taiwanese Mandarin</option>
+                      <option value="tr">Turkish</option>
+                  </select>
+              </th>
+          </tr>
+        </div>
+  
+        <div class="containertext">
+          <tr>
+          
+              <th>
+                  
+                  <textarea id="inputText" class="translatetextarea" name="inputText" rows="18" cols="55" placeholder="Type or paste your text to translate"></textarea>
+              </th>
+              <th>
+                
+                  <textarea id="outputText" class="translatetextarea" name="outputText" rows="18" cols="55" placeholder="Translated text"></textarea>
+              </th>
+          </tr>
+          </div>
+  
+          <tr>
+              <th align="left">
+                  <button type="button" class="buttonclasstranslate" id="translateButton" name="translateButton" onclick="doTranslate()">Translate</button>
+                  <!-- <button type="button" name="synthesizeButton" onclick="doSynthesizeInput()">Synthesize Input Speech</button> -->
+                  <button type="button" class="buttonclasstranslate" name="clearButton" onclick="clearInputs()">Clear</button>
+              </th>
+              <th align="left">
+                  <!-- <button type="button" name="synthesizeButton" onclick="doSynthesizeOutput()">Synthesize Output Speech</button> -->
+              </th>
+          </tr>
+  
+      </table>
+      <br>
+      <br>
+      <br>
+      <br>
+      <!-- <footer>
+              <p class="footer">This webservice is using resources from AWS but is not officially from amazon.com or the company Amazon.</p>
+          </footer> -->
+      <script type="text/javascript">
+          // set the focus to the input box
+          document.getElementById("inputText").focus();
+  
+          /**
+          * Change the region and endpoint.
+          */
+          AWS.config.region = 'us-east-2'; // Region
+  
+           /**
+           * In a production application you should use a secure method of authenticating uses, such as the ones 
+           * described here:
+           *   https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/setting-credentials-browser.html
+           *
+           * Note that Amazon Translate does not work with Amazon Cognito Identity.
+           *
+           * For this example you place the credentials of an IAM user in the HTML page. The IAM user associated 
+           * with these credentials must have permissions to call Amazon Translate. We recommend using the following 
+           * permissions policy and nothing more, as anyone that has access to this HTML page will also have access to 
+           * these hard-coded credentials.
+           * {
+           *     "Version": "2012-10-17",
+           *     "Statement": [
+           *         {
+           *             "Action": [
+           *                 "translate:TranslateText",
+           *                 "polly:SynthesizeSpeech"
+           *             ],
+           *             "Resource": "*",
+           *             "Effect": "Allow"
+           *         }
+           *     ]
+           * }
+           * 
+           * For more information about the AWS Credentials object, see:
+           *   http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/Credentials.html
+           */
+          AWS.config.credentials = new AWS.Credentials("AKIAZLB4O4AZJ7PJUDFQ", "aWe7VQuAinKgK+wC79LTJJAAUa4lrLPESeaTcD/A");
+  
+          var translate = new AWS.Translate({region: AWS.config.region});
+          var polly = new AWS.Polly();
+  
+          function doTranslate() {
+              var inputText = document.getElementById('inputText').value;
+              if (!inputText) {
+                  alert("Input text cannot be empty.");
+                  exit();
+              }
+  
+              // get the language codes
+              var sourceDropdown = document.getElementById("sourceLanguageCodeDropdown");
+              var sourceLanguageCode = sourceDropdown.options[sourceDropdown.selectedIndex].value;
+  
+              var targetDropdown = document.getElementById("targetLanguageCodeDropdown");
+              var targetLanguageCode = targetDropdown.options[targetDropdown.selectedIndex].value;
+  
+              var params = {
+                  Text: inputText,
+                  SourceLanguageCode: sourceLanguageCode,
+                  TargetLanguageCode: targetLanguageCode
+              };
+  
+              translate.translateText(params, function(err, data) {
+                  if (err) {
+                      console.log(err, err.stack);
+                      alert("Error calling UniTranslate. " + err.message);
+                      return;
+                  }
+                  if (data) {
+                      var outputTextArea = document.getElementById('outputText');
+                      outputTextArea.value = data.TranslatedText;
+                  }
+              });
+          }
+  
+          function doSynthesizeInput() {
+              var text = document.getElementById('inputText').value.trim();
+              if (!text) {
+                  return;
+              }
+              var sourceLanguageCode = document.getElementById("sourceLanguageCodeDropdown").value;
+              doSynthesize(text, sourceLanguageCode);
+          }
+  
+          function doSynthesizeOutput() {
+              var text = document.getElementById('outputText').value.trim();
+              if (!text) {
+                  return;
+              }
+              var targetLanguageCode = document.getElementById("targetLanguageCodeDropdown").value;
+              doSynthesize(text, targetLanguageCode);
+          }
+  
+          function doSynthesize(text, languageCode) {
+              var voiceId;
+              switch (languageCode) {
+                  case "de":
+                      voiceId = "Marlene";
+                      break;
+                  case "en":
+                      voiceId = "Joanna";
+                      break;
+                  case "es":
+                      voiceId = "Penelope";
+                      break;
+                  case "fr":
+                      voiceId = "Celine";
+                      break;
+                  case "pt":
+                      voiceId = "Vitoria";
+                      break;
+                  default:
+                      voiceId = null;
+                      break;
+              }
+              if (!voiceId) {
+                  alert("Speech synthesis unsupported for language code: \"" + languageCode + "\"");
+                  return;
+              }
+              var params = {
+                  OutputFormat: "mp3", 
+                  SampleRate: "8000", 
+                  Text: text, 
+                  TextType: "text", 
+                  VoiceId: voiceId
+              };
+              polly.synthesizeSpeech(params, function(err, data) {
+                  if (err) {
+                      console.log(err, err.stack); // an error occurred
+                      alert("Error calling UniTranslate Lea. " + err.message);
+                  }
+                  else {
+                      var uInt8Array = new Uint8Array(data.AudioStream);
+                      var arrayBuffer = uInt8Array.buffer;
+                      var blob = new Blob([arrayBuffer]);
+                      var url = URL.createObjectURL(blob);
+  
+                      audioElement = new Audio([url]);
+                      audioElement.play();
+                  }
+              });
+          }
+  
+          function clearInputs() {
+              document.getElementById('inputText').value = "";
+              document.getElementById('outputText').value = "";
+              document.getElementById("sourceLanguageCodeDropdown").value = "en";
+              document.getElementById("targetLanguageCodeDropdown").value = "en";
+          }
+      </script>
+  </body>
+    <script>
+  
+  var x, i, j, selElmnt, a, b, c;
+  /* Look for any elements with the class "custom-select": */
+  x = document.getElementsByClassName("custom-select");
+  for (i = 0; i < x.length; i++) {
+    selElmnt = x[i].getElementsByTagName("select")[0];
+    /* For each element, create a new DIV that will act as the selected item: */
+    a = document.createElement("DIV");
+    a.setAttribute("class", "select-selected");
+    a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
+    x[i].appendChild(a);
+    /* For each element, create a new DIV that will contain the option list: */
+    b = document.createElement("DIV");
+    b.setAttribute("class", "select-items select-hide");
+    for (j = 1; j < selElmnt.length; j++) {
+      /* For each option in the original select element,
+      create a new DIV that will act as an option item: */
+      c = document.createElement("DIV");
+      c.innerHTML = selElmnt.options[j].innerHTML;
+      c.addEventListener("click", function(e) {
+          /* When an item is clicked, update the original select box,
+          and the selected item: */
+          var y, i, k, s, h;
+          s = this.parentNode.parentNode.getElementsByTagName("select")[0];
+          h = this.parentNode.previousSibling;
+          for (i = 0; i < s.length; i++) {
+            if (s.options[i].innerHTML == this.innerHTML) {
+              s.selectedIndex = i;
+              h.innerHTML = this.innerHTML;
+              y = this.parentNode.getElementsByClassName("same-as-selected");
+              for (k = 0; k < y.length; k++) {
+                y[k].removeAttribute("class");
+              }
+              this.setAttribute("class", "same-as-selected");
+              break;
+            }
+          }
+          h.click();
+      });
+      b.appendChild(c);
+    }
+    x[i].appendChild(b);
+    a.addEventListener("click", function(e) {
+      /* When the select box is clicked, close any other select boxes,
+      and open/close the current select box: */
+      e.stopPropagation();
+      closeAllSelect(this);
+      this.nextSibling.classList.toggle("select-hide");
+      this.classList.toggle("select-arrow-active");
+    });
+  }
+  
+  function closeAllSelect(elmnt) {
+    /* A function that will close all select boxes in the document,
+    except the current select box: */
+    var x, y, i, arrNo = [];
+    x = document.getElementsByClassName("select-items");
+    y = document.getElementsByClassName("select-selected");
+    for (i = 0; i < y.length; i++) {
+      if (elmnt == y[i]) {
+        arrNo.push(i)
+      } else {
+        y[i].classList.remove("select-arrow-active");
+      }
+    }
+    for (i = 0; i < x.length; i++) {
+      if (arrNo.indexOf(i)) {
+        x[i].classList.add("select-hide");
+      }
+    }
+  }
+  
+  /* If the user clicks anywhere outside the select box,
+  then close all select boxes: */
+  document.addEventListener("click", closeAllSelect);
+  
+  var input = document.getElementById("translateButton");
+  input.addEventListener("keyup", function(event) {
+    if (event.keyCode === 13) {
+     event.preventDefault();
+     document.getElementById("translateButton").click();
+    }
+  })
+
+    <script>
+      var input = document.getElementById("qsLoginBtn");
+      input.addEventListener("keyup", function(event) {
+        if (event.keyCode === 13) {
+          event.preventDefault();
+          input.click();} })
+    </script>
+</html>
